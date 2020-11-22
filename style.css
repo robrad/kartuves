@@ -46,3 +46,33 @@ body {
     width: 50%;
     transition: width 0.3s;
 }
+
+.levels {
+    display: flex;
+    margin-top: 50px;
+    justify-content: center;
+}
+
+button {
+    margin: 15px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    padding: 5px 10px;
+    font-weight: 600;
+}
+
+.easy {
+    background-color: #34eb6b;
+}
+
+.medium {
+    background-color: #ebd934;
+}
+
+.hard {
+    background-color: #d10f0f;
+}
+
+
+

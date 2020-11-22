@@ -2,10 +2,14 @@ const gameData = {
     currentWord: "darbas",
     progress: 0,
     possibleWords: ["obuolys", "bitas", "saldainis", "monitorius", "sofa"],
+    level: 0,
     chooseRandomWord: function() {
         const randomIndex = Math.floor(Math.random() * this.possibleWords.length);
         this.currentWord = this.possibleWords[randomIndex];
-    }
+    },
+    resetProgress: function() {
+        this.progress = 0;
+    },
 };
 
 // Math.random(0.5) = 1
@@ -15,8 +19,11 @@ const gameData = {
 
 const UI = {
     wordElement: document.querySelector(".word"),
-    progressBar: document.querySelector(".bar")
+    progressBar: document.querySelector(".bar"),
+    levelButtons: document.querySelectorAll("button")
 }
+
+console.log(UI.levelButtons)
 
 function generateLetters() {
     UI.wordElement.innerHTML = "";
@@ -52,7 +59,7 @@ document.addEventListener("keydown", (e) => {
         // Jei žmogus atspėjo raidę
         if (letter === wordLetter) {
             console.log(`Žaidėjas atspėjo raidę ${i} pozicijoje`);
-
+    
             UI.wordElement.childNodes[i].innerHTML = letter;
             letterFound = true;
         }
@@ -61,16 +68,30 @@ document.addEventListener("keydown", (e) => {
     // Patikriname, ar nebuvo rasta nei viena raidė
     if (letterFound === false) {
         console.log("Pridedame žmogui baudos taškų!");
-        addProgress(15);
+        addProgress(15 + gameData.level * 10);
     }
 
     checkLoseCondition();
     checkWinCondition();
 });
 
+// for (let button of UI.levelButtons) {
+//     button.addEventListener("click", function() {
+//         console.log(button)
+//     })
+// }
+
+UI.levelButtons.forEach((button, i) => {
+    button.addEventListener("click", function() {
+        gameData.level = i;
+        resetGame(`Pakeistas žaidimo lygis į: ${button.innerHTML}`);
+     })
+})
+
 function checkLoseCondition() {
     if (gameData.progress >= 100) {
         console.log("Žaidėjas pralaimėjo");
+        resetGame("Pralaimėjote...");
     }
 }
 
@@ -79,6 +100,7 @@ function checkWinCondition() {
         if (letterElement.innerHTML === "")
             return;
     }
+    resetGame("Laimėjote!");
 
     console.log("Žodis atspėtas!");
     // Įdėjau papildomą logiką naujo žodžio sugeneravimui
@@ -99,3 +121,13 @@ function renderNewWord() {
     gameData.chooseRandomWord();
     generateLetters();
 }
+
+function resetGame(label) {
+    setTimeout(function() {
+       alert(label);
+        alert("Pradėti naują žaidimą");
+        gameData.resetProgress();
+        initGame();
+    },0) 
+}
+
